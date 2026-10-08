@@ -5,7 +5,7 @@ import userRouter from "./routes/userRoutes";
 import productRoute from "./routes/productRoutes";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
+const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(cors({
         origin: "http://localhost:3000",
@@ -27,8 +27,8 @@ app.get("/", (req, res) => {
     });
 });
 
-app.listen(5000, async () => {
-    console.log("Server running on port 5000");
+app.listen(PORT, async () => {
+    console.log(`Server running on port ${PORT}`);
 
     await testDatabaseConnection();
 });
