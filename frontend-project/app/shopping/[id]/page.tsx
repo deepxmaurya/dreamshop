@@ -32,7 +32,7 @@ function handleCancel() {
             const { id } = await params;
 
             const response = await fetch(
-                `http://localhost:5000/product/${id}`
+                `${process.env.NEXT_PUBLIC_API_URL}/product/${id}`
             );
 
             const data = await response.json();

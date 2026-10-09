@@ -20,7 +20,7 @@ export default function Cart() {
         async function getCart() {
             try {
                 const response = await fetch(
-                    "http://localhost:5000/cart",
+                    `${process.env.NEXT_PUBLIC_API_URL}/cart`,
                     {
                         credentials: "include",
                     }

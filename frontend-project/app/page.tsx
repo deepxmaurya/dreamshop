@@ -1,7 +1,7 @@
 import Link from "next/link";
 import AuthGuard from "./components/AuthGuard";
 export default async function Home() {
-    const response = await fetch("http://localhost:5000/users");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`);
     const users = await response.json();
 
     return (

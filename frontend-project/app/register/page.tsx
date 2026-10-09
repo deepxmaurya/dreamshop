@@ -10,7 +10,7 @@ export default function Register() {
     async function handleRegister(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const response = await fetch("http://localhost:5000/users/register", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

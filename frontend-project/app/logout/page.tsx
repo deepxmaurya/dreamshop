@@ -12,7 +12,7 @@ export default function Logout() {
 
     async function handleLogout() {
         await fetch(
-        "http://localhost:5000/users/logout",
+        `${process.env.NEXT_PUBLIC_API_URL}/users/logout`,
         {
             method: "POST",
             credentials: "include"
