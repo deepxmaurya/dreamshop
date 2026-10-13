@@ -29,9 +29,6 @@ export async function testDatabaseConnection() {
     console.error("MySQL connection failed:", error);
   }
 }
-<<<<<<< HEAD
 export default pool;
-=======
 
-export default pool;
->>>>>>> d6bdb13 (database file changes)
+
