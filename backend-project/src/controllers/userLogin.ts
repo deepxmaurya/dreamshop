@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import pool from "../config/databases";
+import bcrypt from "bcrypt";
 
 export const login = async (
     req: Request,
@@ -35,7 +36,11 @@ export const login = async (
         console.log("Entered password:", password);
 
         // Password check
-        if (password !== user.password) {
+        const isPasswordCorrect = await bcrypt.compare(
+                                password,
+                                user.password
+                                );
+        if (!isPasswordCorrect) {
             return res.status(401).json({
                 message: "Invalid username or password"
             });
