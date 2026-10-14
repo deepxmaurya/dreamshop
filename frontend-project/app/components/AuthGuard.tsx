@@ -23,7 +23,7 @@ export default function AuthGuard({
             try {
 
                 const response = await fetch(
-                    "http://localhost:5000/users/me",
+                    `${process.env.NEXT_PUBLIC_API_URL}/users/me`,
                     {
                         method: "GET",
                         credentials: "include"
