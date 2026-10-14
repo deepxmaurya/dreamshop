@@ -6,6 +6,7 @@ import { FormEvent, useState } from "react";
 export default function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [role, setRole] = useState("user");
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState<"success" | "error" | "">("");
     const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ export default function Register() {
                     body: JSON.stringify({
                         username,
                         password,
-                        role: "user",
+                        role,
                     }),
                 }
             );
@@ -46,6 +47,7 @@ export default function Register() {
 
             setUsername("");
             setPassword("");
+            setRole("user");
         } catch (error) {
             console.error("Registration error:", error);
             setMessage("Server se connect nahi ho paya!");
@@ -92,7 +94,7 @@ export default function Register() {
                         />
                     </div>
 
-                    <div className="mb-6">
+                    <div className="mb-4">
                         <label className="block mb-2 font-medium text-white">
                             Password
                         </label>
@@ -105,6 +107,22 @@ export default function Register() {
                             placeholder="Enter password"
                             className="w-full border border-gray-300 rounded-lg px-4 py-2 text-white"
                         />
+                    </div>
+
+                    <div className="mb-6">
+                        <label className="block mb-2 font-medium text-white">
+                            Role
+                        </label>
+
+                        <select
+                            required
+                            value={role}
+                            onChange={(event) => setRole(event.target.value)}
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-black text-white"
+                        >
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
                     </div>
 
                     <button
