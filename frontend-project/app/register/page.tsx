@@ -9,7 +9,7 @@ export default function Register() {
 
     async function handleRegister(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-
+        try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
             method: "POST",
             headers: {
@@ -23,9 +23,21 @@ export default function Register() {
         });
 
         const data = await response.json();
+        if (response.ok) {
+            alert(data.message || "Registration successful!");
+        } else {
+            alert(data.message || "Registration failed!");
+        }
 
         console.log(data);
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        alert("Server se connect nahi ho paya!");
     }
+}
+       
+    
 
     return (
         <main className="min-h-screen bg-gray-100 flex items-center justify-center">
