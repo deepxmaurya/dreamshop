@@ -16,6 +16,7 @@ import adminRoutes from "./routes/adminRoutes";
 app.use(cors({
 origin: [
 "http://localhost:3000",
+"https://dreamshop-40c744z8t-dream-shop1.vercel.app",
 "https://dreamshop-ashen.vercel.app"
 ],
 credentials: true
