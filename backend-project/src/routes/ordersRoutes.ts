@@ -13,7 +13,7 @@ router.post("/:id/cancel", authenticate, cancelOrder);
 
 router.patch("/:id/delivered", authenticate, markDelivered);
 router.delete("/:id", authenticate, hideOrder);
-router.get("/", authorizeAdmin,getOrders);
-router.get("/summary", authorizeAdmin,getOrderSummaryController);
+router.get("/", authenticate,authorizeAdmin,getOrders);
+router.get("/summary", authenticate,authorizeAdmin,getOrderSummaryController);
 
 export default router;
