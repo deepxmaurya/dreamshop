@@ -1,5 +1,7 @@
+
 "use client";
-import {useRouter} from "next/navigation";
+
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type Product = {
@@ -13,55 +15,136 @@ type Product = {
     stock: number;
 };
 
+type CartItem = Product & {
+    quantity: number;
+};
 
 export default function ProductDetail({
     params,
 }: {
     params: Promise<{ id: string }>;
-})
-
- {
+}) {
     const router = useRouter();
-function handleCancel() {
-    router.push("/");
-}
+
     const [product, setProduct] = useState<Product | null>(null);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         async function getProduct() {
-            const { id } = await params;
+            try {
+                const { id } = await params;
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/product/${id}`
-            );
+                const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/product/${id}`
+                );
 
-            const data = await response.json();
+                if (!response.ok) {
+                    throw new Error("Product load nahi hua");
+                }
 
-            console.log("PRODUCT:", data);
-
-            setProduct(data);
+                const data = await response.json();
+                setProduct(data);
+            } catch (error) {
+                console.error("Product error:", error);
+                setMessage("Product load nahi ho paya.");
+            }
         }
 
         getProduct();
-    }, []);
+    }, [params]);
+
+    function addToCart() {
+        if (!product) return;
+
+        if (product.stock < 1) {
+            setMessage("Ye product abhi stock mein nahi hai.");
+            return;
+        }
+
+        try {
+            const savedCart = localStorage.getItem("cart");
+            const cart: CartItem[] = savedCart
+                ? JSON.parse(savedCart)
+                : [];
+
+            const existingItem = cart.find(
+                (item) => item.id === product.id
+            );
+
+            if (existingItem) {
+                if (existingItem.quantity >= product.stock) {
+                    setMessage("Available stock se zyada quantity nahi le sakte.");
+                    return;
+                }
+
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1,
+                });
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            setMessage("Product Cart mein add ho gaya!");
+        } catch (error) {
+            console.error("Cart error:", error);
+            setMessage("Cart mein product add nahi ho paya.");
+        }
+    }
+
+    function buyNow() {
+        if (!product) return;
+
+        if (product.stock < 1) {
+            setMessage("Ye product abhi stock mein nahi hai.");
+            return;
+        }
+
+        try {
+            const savedCart = localStorage.getItem("cart");
+            const cart: CartItem[] = savedCart
+                ? JSON.parse(savedCart)
+                : [];
+
+            const existingItem = cart.find(
+                (item) => item.id === product.id
+            );
+
+            if (existingItem) {
+                if (existingItem.quantity >= product.stock) {
+                    setMessage("Available stock se zyada quantity nahi le sakte.");
+                    return;
+                }
+
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1,
+                });
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            router.push("/cart");
+        } catch (error) {
+            console.error("Cart error:", error);
+            setMessage("Cart mein product add nahi ho paya.");
+        }
+    }
 
     if (!product) {
         return (
             <main className="min-h-screen flex items-center justify-center">
-                <p>Loading...</p>
+                <p>{message || "Loading..."}</p>
             </main>
         );
     }
 
     return (
-        <main className=" mt-12 min-h-screen bg-gray-100 p-8">
-
+        <main className="mt-12 min-h-screen bg-gray-100 p-8">
             <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-8">
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-                    {/* Product Image */}
-
                     <div className="flex items-center justify-center">
                         <img
                             src={product.image}
@@ -70,11 +153,7 @@ function handleCancel() {
                         />
                     </div>
 
-
-                    {/* Product Information */}
-
                     <div>
-
                         <p className="text-gray-500 text-sm">
                             {product.category}
                         </p>
@@ -87,11 +166,7 @@ function handleCancel() {
                             {product.description}
                         </p>
 
-
-                        {/* Price */}
-
                         <div className="mt-6">
-
                             <p className="text-3xl font-bold">
                                 ₹{product.price}
                             </p>
@@ -99,41 +174,39 @@ function handleCancel() {
                             <p className="text-green-600 font-semibold mt-2">
                                 {product.discount}% OFF
                             </p>
-
                         </div>
 
-
-                        {/* Stock */}
-
                         <p className="mt-6">
-                            <span className="font-semibold">
-                                Stock:
-                            </span>{" "}
+                            <span className="font-semibold">Stock:</span>{" "}
                             {product.stock}
                         </p>
 
+                        {message && (
+                            <p className="mt-4 text-blue-700 font-medium">
+                                {message}
+                            </p>
+                        )}
 
-                        {/* Buttons */}
-
-                        <div className="flex gap-4 mt-8">
-
-                            <button className="bg-yellow-500 px-6 py-3 rounded-lg font-semibold"
-                             onClick={handleCancel}>
+                        <div className="flex flex-wrap gap-4 mt-8">
+                            <button
+                                onClick={addToCart}
+                                disabled={product.stock < 1}
+                                className="bg-yellow-500 px-6 py-3 rounded-lg font-semibold disabled:opacity-50"
+                            >
                                 Add to Cart
                             </button>
 
-                            <button className="bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold">
+                            <button
+                                onClick={buyNow}
+                                disabled={product.stock < 1}
+                                className="bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50"
+                            >
                                 Buy Now
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </main>
     );
 }

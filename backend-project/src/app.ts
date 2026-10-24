@@ -7,6 +7,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 const PORT = process.env.PORT || 5000;
 const app = express();
+import checkoutRoutes from "./routes/checkoutRoutes";
+import ordersRoutes from "./routes/ordersRoutes";
+import adminRoutes from "./routes/adminRoutes";
+
+
+
 app.use(cors({
 origin: [
 "http://localhost:3000",
@@ -23,6 +29,9 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 app.use("/users", userRouter);
 app.use("/product", productRoute);
+app.use("/checkout", checkoutRoutes);
+app.use("/orders", ordersRoutes);
+app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
     res.json({

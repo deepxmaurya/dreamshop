@@ -13,7 +13,7 @@ export const register = async (req: Request, res: Response) => {
         await pool.query(
             `INSERT INTO register (username, password, role)
              VALUES (?, ?, ?)`,
-            [username, hashedPassword, role]
+            [username, hashedPassword, "user"]
         );
 
         return res.status(201).json({

@@ -48,10 +48,10 @@ export default function Footer() {
                         </Link>
 
                         <Link
-                            href="/contact"
+                            href="/admin/dashboard"
                             className="hover:text-blue-400"
                         >
-                            Contact
+                            Admin dashboard
                         </Link>
                     </div>
 

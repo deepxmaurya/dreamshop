@@ -1,6 +1,6 @@
 
 "use client";
-
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export default function Register() {
@@ -10,6 +10,7 @@ export default function Register() {
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState<"success" | "error" | "">("");
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     async function handleRegister(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -44,10 +45,11 @@ export default function Register() {
 
             setMessage(data.message || "Registration successful!");
             setMessageType("success");
-
+              
             setUsername("");
             setPassword("");
             setRole("user");
+             router.push("/login");
         } catch (error) {
             console.error("Registration error:", error);
             setMessage("Server se connect nahi ho paya!");

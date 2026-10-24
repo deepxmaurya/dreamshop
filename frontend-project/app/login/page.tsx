@@ -50,7 +50,7 @@ export default function LoginPage() {
             }
 
             setMessage(data.message || "Login successful");
-          router.push("/");
+          router.push("/dashboard");
         } catch (error) {
             console.error("Login error:", error);
 
