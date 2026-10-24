@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
 export const logout = (req: Request, res: Response) => {
 
-    res.clearCookie("auth_token");
+    res.clearCookie("auth_token",{
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  });
 
     return res.json({
         message: "Logout successful"
